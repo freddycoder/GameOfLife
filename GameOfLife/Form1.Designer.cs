@@ -37,7 +37,9 @@
             this.LabelCarte = new System.Windows.Forms.ToolStripLabel();
             this.listTemplate = new System.Windows.Forms.ToolStripComboBox();
             this.NouvelleCarteAleatoire = new System.Windows.Forms.ToolStripButton();
+            this.LabelSleepTime = new System.Windows.Forms.ToolStripLabel();
             this.SleepTime = new System.Windows.Forms.ToolStripTextBox();
+            this.LabelT = new System.Windows.Forms.ToolStripLabel();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.LabelMessageError = new System.Windows.Forms.Label();
             this.gameOfLifeImage = new System.Windows.Forms.PictureBox();
@@ -56,12 +58,14 @@
             this.LabelCarte,
             this.listTemplate,
             this.NouvelleCarteAleatoire,
-            this.SleepTime});
+            this.LabelSleepTime,
+            this.SleepTime,
+            this.LabelT});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(800, 25);
             this.toolStrip1.TabIndex = 1;
-            this.toolStrip1.Text = "toolStrip1";
+            this.toolStrip1.Text = "Nouvelle Carte Aléatoire";
             // 
             // LabelLongeur
             // 
@@ -102,14 +106,27 @@
             this.NouvelleCarteAleatoire.Image = ((System.Drawing.Image)(resources.GetObject("NouvelleCarteAleatoire.Image")));
             this.NouvelleCarteAleatoire.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.NouvelleCarteAleatoire.Name = "NouvelleCarteAleatoire";
-            this.NouvelleCarteAleatoire.Size = new System.Drawing.Size(98, 22);
-            this.NouvelleCarteAleatoire.Text = "toolStripButton1";
+            this.NouvelleCarteAleatoire.Size = new System.Drawing.Size(139, 22);
+            this.NouvelleCarteAleatoire.Text = "Nouvelle Carte Aléatoire";
             this.NouvelleCarteAleatoire.ToolTipText = "Nouvelle Carte Aléatoire";
+            // 
+            // LabelSleepTime
+            // 
+            this.LabelSleepTime.Name = "LabelSleepTime";
+            this.LabelSleepTime.Size = new System.Drawing.Size(47, 22);
+            this.LabelSleepTime.Text = "Ms.A.R.";
+            this.LabelSleepTime.ToolTipText = "Milliseconde avant rafraichissement";
             // 
             // SleepTime
             // 
             this.SleepTime.Name = "SleepTime";
             this.SleepTime.Size = new System.Drawing.Size(100, 25);
+            // 
+            // LabelT
+            // 
+            this.LabelT.Name = "LabelT";
+            this.LabelT.Size = new System.Drawing.Size(23, 22);
+            this.LabelT.Text = "t: 0";
             // 
             // tableLayoutPanel1
             // 
@@ -181,6 +198,8 @@
         private System.Windows.Forms.Label LabelMessageError;
         private System.Windows.Forms.PictureBox gameOfLifeImage;
         private System.Windows.Forms.ToolStripTextBox SleepTime;
+        private System.Windows.Forms.ToolStripLabel LabelSleepTime;
+        private System.Windows.Forms.ToolStripLabel LabelT;
     }
 }
 

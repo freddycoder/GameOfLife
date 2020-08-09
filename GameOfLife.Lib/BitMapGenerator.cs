@@ -13,11 +13,11 @@ namespace GameOfLife.Lib
         }
         public Carte Carte { get; }
 
-        public Bitmap ObtenirProchaineImage()
+        public DirectBitmap ObtenirProchaineImage()
         {
             var carteActuel = Carte.String;
 
-            var bitmap = new Bitmap(Carte.Dimession.Width, Carte.Dimession.Height);
+            var bitmap = new DirectBitmap(Carte.Dimession.Width, Carte.Dimession.Height);
 
             Carte.ExecuterTour();
 
@@ -29,25 +29,25 @@ namespace GameOfLife.Lib
             return bitmap;
         }
 
-        public void UpdateBitmap(Bitmap bitmap)
+        public void UpdateBitmap(DirectBitmap bitmap)
         {
-            var carteActuel = Carte.String;
+            var cartePRecedente = Carte.String;
 
             Carte.ExecuterTour();
 
             foreach (var cellule in Carte.Cellules())
             {
-                bitmap.SetPixel(cellule.Point.X, cellule.Point.Y, DeterminerCouleur(carteActuel, cellule));
+                bitmap.SetPixel(cellule.Point.X, cellule.Point.Y, DeterminerCouleur(cartePRecedente, cellule));
             }
         }
 
-        private Color DeterminerCouleur(string carteActuel, Cellule celluleProchainTour)
+        private Color DeterminerCouleur(string cartePrecedente, Cellule celluleActuel)
         {
-            var cellActuel = carteActuel[(celluleProchainTour.Point.X * celluleProchainTour.Carte.Dimession.Height) + celluleProchainTour.Point.Y];
+            var cellActuel = cartePrecedente[(celluleActuel.Point.Y * celluleActuel.Carte.Dimession.Width) + celluleActuel.Point.X];
 
             if (cellActuel == 'A') 
             {
-                if (celluleProchainTour.Etat == 'A')
+                if (celluleActuel.Etat == 'A')
                 {
                     return Color.Blue;
                 }

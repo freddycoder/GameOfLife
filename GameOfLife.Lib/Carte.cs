@@ -11,7 +11,7 @@ namespace GameOfLife.Lib
     public class Carte
     {
         private string _carte;
-        private Dictionary<Point, Cellule> _cells = new Dictionary<Point, Cellule>();
+        private readonly Dictionary<Point, Cellule> _cells;
 
         public Carte(Size dimenssion, string carte)
         {
@@ -20,18 +20,20 @@ namespace GameOfLife.Lib
             Valider(dimenssion, carte);
 
             Dimession = dimenssion;
+            _cells = new Dictionary<Point, Cellule>(Dimession.Width * Dimession.Height);
             _carte = carte;
 
-            for (int i = 0; i < _carte.Length; i++)
+            for (int y = 0; y < Dimession.Height; y++)
             {
-                var x = i / Dimession.Height;
-                var y = i - (x * Dimession.Height);
+                for (int x = 0; x < Dimession.Width; x++)
+                {
+                    var key = new Point(x, y);
 
-                var key = new Point(x, y);
-
-                _cells.Add(key, new Cellule(key, this));
+                    _cells.Add(key, new Cellule(key, this));
+                }
             }
         }
+
         private string SkipSpace(string carte)
         {
             var sb = new StringBuilder();
@@ -63,7 +65,7 @@ namespace GameOfLife.Lib
             }
         }
 
-        public void ExecuterTour(Action<char> additionnalStep = null)
+        public void ExecuterTour()
         {
             var sb = new StringBuilder();
 
@@ -83,8 +85,6 @@ namespace GameOfLife.Lib
                 }
 
                 sb.Append(c);
-
-                additionnalStep?.Invoke(c);
             }
 
             Debug.Assert(sb.ToString().Length == _carte.ToString().Length);
@@ -105,11 +105,11 @@ namespace GameOfLife.Lib
 
         private List<Cellule> InitCellules()
         {
-            _cellules = new List<Cellule>(Dimession.Width * Dimession.Width);
+            _cellules = new List<Cellule>(Dimession.Width * Dimession.Height);
 
-            for (int i = 0; i < Dimession.Width; i++)
+            for (int j = 0; j < Dimession.Height; j++)
             {
-                for (int j = 0; j < Dimession.Height; j++)
+                for (int i = 0; i < Dimession.Width; i++)
                 {
                     _cellules.Add(_cells[new Point(i, j)]);
                 }

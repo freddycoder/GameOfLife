@@ -18,14 +18,21 @@ namespace GameOfLife.Lib
         {
             get
             {
-                if (Point.X >= 0 && Point.X < Carte.Dimession.Width &&
-                    Point.Y >= 0 && Point.Y < Carte.Dimession.Height)
+                if (IsLocatedOnTheMap())
                 {
-                    return Carte.ToString()[(Point.X * Carte.Dimession.Height) + Point.Y];
+                    return Carte.ToString()[(Point.Y * Carte.Dimession.Width) + Point.X];
                 }
+                
                 return '0';
             }
         }
+
+        public bool IsLocatedOnTheMap()
+        {
+            return Point.X >= 0 && Point.X < Carte.Dimession.Width &&
+                   Point.Y >= 0 && Point.Y < Carte.Dimession.Height;
+        }
+
         public Carte Carte { get; }
 
         public Cellule[] Voisins()

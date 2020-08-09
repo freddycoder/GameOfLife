@@ -33,5 +33,47 @@ namespace GameOfLife.Test
         {
             ShouldThrowExtensions.ShouldThrow<ArgumentNullException>(() => new Carte(default, carte));
         }
+
+        [Fact]
+        public void UneCarteDiteHorizontaleDevraitBienFonctionner()
+        {
+            var carte = new Carte(new Size(6, 2), "0A0000\n0A0000");
+
+            var p = new Point(1, 0);
+
+            var cell = carte[p];
+
+            cell.Etat.ShouldBe('A');
+            cell.Point.ShouldBe(p);
+
+            var p2 = new Point(1, 1);
+
+            var cell2 = carte[p2];
+
+            cell2.Etat.ShouldBe('A');
+
+            cell2.Point.ShouldBe(p2);
+        }
+
+        [Fact]
+        public void UneCarteDiteVerticaleDevraitBienFonctionner()
+        {
+            var carte = new Carte(new Size(2, 6), "0A\n00\n00\n0A\n00\n00");
+
+            var p = new Point(1, 0);
+
+            var cell = carte[p];
+
+            cell.Etat.ShouldBe('A');
+            cell.Point.ShouldBe(p);
+
+            var p2 = new Point(1, 3);
+
+            var cell2 = carte[p2];
+
+            cell2.Etat.ShouldBe('A');
+
+            cell2.Point.ShouldBe(p2);
+        }
     }
 }

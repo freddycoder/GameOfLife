@@ -79,37 +79,34 @@ namespace GameOfLife
             }
         }
 
-        private CancellationTokenSource tokenSource = new CancellationTokenSource();
-        private Task task;
+        private CancellationTokenSource _tokenSource = new CancellationTokenSource();
+        private Task _task;
         private async void UpdateImage()
         {
             try
             {
-                if (task != null)
-                {
-                    tokenSource.Cancel();
+                CancelPreviousTask();
 
-                    tokenSource.Dispose();
-
-                    tokenSource = new CancellationTokenSource();
-                }
-
-                task = Task.Run(() =>
+                _task = Task.Run(() =>
                 {
                     var chrono = new Stopwatch();
 
-                    var bitmap = _generator.ObtenirProchaineImage();
+                    var directBitmap = _generator.ObtenirProchaineImage();
+
+                    int t = 0;
 
                     while (true)
                     {
                         chrono.Reset();
                         chrono.Start();
 
-                        tokenSource.Token.ThrowIfCancellationRequested();
+                        _tokenSource.Token.ThrowIfCancellationRequested();
 
-                        _generator.UpdateBitmap(bitmap);
+                        _generator.UpdateBitmap(directBitmap);
 
-                        gameOfLifeImage.Image = bitmap.Redimessionner(gameOfLifeImage.Bounds.Width, gameOfLifeImage.Bounds.Height);
+                        gameOfLifeImage.Image = directBitmap.Bitmap.Redimessionner(gameOfLifeImage.Bounds.Width, gameOfLifeImage.Bounds.Height);
+
+                        UpdateTime(t++);
 
                         chrono.Stop();
 
@@ -120,13 +117,48 @@ namespace GameOfLife
                             Thread.Sleep(timeLeft);
                         }
                     }
-                }, tokenSource.Token);
+                }, _tokenSource.Token);
 
-                await task;
+                await _task;
             }
             catch (Exception e)
             {
                 LabelMessageError.Text = e.Message;
+            }
+        }
+
+        private void CancelPreviousTask()
+        {
+            if (_task != null)
+            {
+                _tokenSource.Cancel();
+
+                try
+                {
+                    if (_task.IsCompleted == false)
+                    {
+                        _task.Wait(2000);
+                    }
+                }
+                catch { }
+
+                _tokenSource.Dispose();
+
+                _tokenSource = new CancellationTokenSource();
+            }
+        }
+
+        private void UpdateTime(int t)
+        {
+            MethodInvoker methodInvokerDelegate = delegate () { LabelT.Text = $"t: {t}"; };
+
+            if (this.InvokeRequired)
+            {
+                Invoke(methodInvokerDelegate);
+            }
+            else
+            {
+                methodInvokerDelegate();
             }
         }
     }
