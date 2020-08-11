@@ -31,13 +31,13 @@ namespace GameOfLife.Lib
 
         public void UpdateBitmap(DirectBitmap bitmap)
         {
-            var cartePRecedente = Carte.String;
+            var cartePrecedente = Carte.String;
 
             Carte.ExecuterTour();
 
             foreach (var cellule in Carte.Cellules())
             {
-                bitmap.SetPixel(cellule.Point.X, cellule.Point.Y, DeterminerCouleur(cartePRecedente, cellule));
+                bitmap.SetPixel(cellule.Point.X, cellule.Point.Y, DeterminerCouleur(cartePrecedente, cellule));
             }
         }
 

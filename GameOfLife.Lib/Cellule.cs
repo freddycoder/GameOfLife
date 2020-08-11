@@ -14,23 +14,43 @@ namespace GameOfLife.Lib
         }
 
         public Point Point { get; }
+
+        private char? _etat;
         public char Etat
         {
             get
             {
-                if (IsLocatedOnTheMap())
-                {
-                    return Carte.ToString()[(Point.Y * Carte.Dimession.Width) + Point.X];
-                }
-                
-                return '0';
+                return _etat ?? CalculateEtat();
+            }
+            set
+            {
+                _etat = value;
             }
         }
 
+        private char CalculateEtat()
+        {
+            if (IsLocatedOnTheMap())
+            {
+                return Carte.ToString()[(Point.Y * Carte.Dimession.Width) + Point.X];
+            }
+
+            return '0';
+        }
+
+        private bool? _isOnMap;
+
         public bool IsLocatedOnTheMap()
         {
-            return Point.X >= 0 && Point.X < Carte.Dimession.Width &&
-                   Point.Y >= 0 && Point.Y < Carte.Dimession.Height;
+            return _isOnMap ?? CalculateIsOnMap();
+        }
+
+        private bool CalculateIsOnMap()
+        {
+            _isOnMap = Point.X >= 0 && Point.X < Carte.Dimession.Width &&
+                       Point.Y >= 0 && Point.Y < Carte.Dimession.Height;
+
+            return _isOnMap.Value;
         }
 
         public Carte Carte { get; }

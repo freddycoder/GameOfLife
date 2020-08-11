@@ -71,7 +71,7 @@ namespace GameOfLife.Lib
 
             foreach (var cellule in Cellules())
             {
-                var voisinEnVie = cellule.Voisins().Count(v => v?.Etat == 'A');
+                var voisinEnVie = NbVoisinEnVie(cellule.Voisins());
 
                 var c = '0';
 
@@ -90,6 +90,28 @@ namespace GameOfLife.Lib
             Debug.Assert(sb.ToString().Length == _carte.ToString().Length);
 
             _carte = sb.ToString();
+
+            for (int i = 0; i < _cellules.Count; i++)
+            {
+                _cellules[i].Etat = _carte[(_cellules[i].Point.Y * Dimession.Width) + _cellules[i].Point.X];
+            }
+        }
+
+        private static int NbVoisinEnVie(Cellule[] cellules)
+        {
+            Debug.Assert(cellules.Length == 8);
+
+            int count = 0;
+
+            for (int i = 0; i < 8; i++)
+            {
+                if (cellules[i].Etat == 'A')
+                {
+                    count++;
+                }
+            }
+
+            return count;
         }
 
         public override string ToString()
