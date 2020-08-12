@@ -7,51 +7,16 @@ namespace GameOfLife.Lib
 {
     public class Cellule
     {
-        public Cellule(Point p, Carte carte)
+        public Cellule(Point p, Carte carte, char etat)
         {
             Point = p;
             Carte = carte;
+            Etat = etat;
         }
 
         public Point Point { get; }
 
-        private char? _etat;
-        public char Etat
-        {
-            get
-            {
-                return _etat ?? CalculateEtat();
-            }
-            set
-            {
-                _etat = value;
-            }
-        }
-
-        private char CalculateEtat()
-        {
-            if (IsLocatedOnTheMap())
-            {
-                return Carte.ToString()[(Point.Y * Carte.Dimession.Width) + Point.X];
-            }
-
-            return '0';
-        }
-
-        private bool? _isOnMap;
-
-        public bool IsLocatedOnTheMap()
-        {
-            return _isOnMap ?? CalculateIsOnMap();
-        }
-
-        private bool CalculateIsOnMap()
-        {
-            _isOnMap = Point.X >= 0 && Point.X < Carte.Dimession.Width &&
-                       Point.Y >= 0 && Point.Y < Carte.Dimession.Height;
-
-            return _isOnMap.Value;
-        }
+        public char Etat { get; set; }
 
         public Carte Carte { get; }
 
@@ -60,7 +25,7 @@ namespace GameOfLife.Lib
             return _voisins ?? InitVoisins();
         }
 
-        private Cellule[] _voisins;
+        private Cellule[]? _voisins;
 
         private Cellule[] InitVoisins()
         {

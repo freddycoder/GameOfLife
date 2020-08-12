@@ -43,6 +43,7 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.LabelMessageError = new System.Windows.Forms.Label();
             this.gameOfLifeImage = new System.Windows.Forms.PictureBox();
+            this.LabelDeltaT = new System.Windows.Forms.ToolStripLabel();
             this.toolStrip1.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gameOfLifeImage)).BeginInit();
@@ -60,7 +61,8 @@
             this.NouvelleCarteAleatoire,
             this.LabelSleepTime,
             this.SleepTime,
-            this.LabelT});
+            this.LabelT,
+            this.LabelDeltaT});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
             this.toolStrip1.Size = new System.Drawing.Size(800, 25);
@@ -166,6 +168,12 @@
             this.gameOfLifeImage.TabIndex = 1;
             this.gameOfLifeImage.TabStop = false;
             // 
+            // LabelDeltaT
+            // 
+            this.LabelDeltaT.Name = "LabelDeltaT";
+            this.LabelDeltaT.Size = new System.Drawing.Size(23, 23);
+            this.LabelDeltaT.Text = "Δt: ";
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
@@ -200,6 +208,7 @@
         private System.Windows.Forms.ToolStripTextBox SleepTime;
         private System.Windows.Forms.ToolStripLabel LabelSleepTime;
         private System.Windows.Forms.ToolStripLabel LabelT;
+        private System.Windows.Forms.ToolStripLabel LabelDeltaT;
     }
 }
 

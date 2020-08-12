@@ -1,5 +1,6 @@
 ﻿using GameOfLife.Lib.Extension;
 using System;
+using System.Buffers;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
@@ -10,7 +11,6 @@ namespace GameOfLife.Lib
 {
     public class Carte
     {
-        private string _carte;
         private readonly Dictionary<Point, Cellule> _cells;
 
         public Carte(Size dimenssion, string carte)
@@ -21,7 +21,8 @@ namespace GameOfLife.Lib
 
             Dimession = dimenssion;
             _cells = new Dictionary<Point, Cellule>(Dimession.Width * Dimession.Height);
-            _carte = carte;
+            _cellules = new Cellule[Dimession.Width * Dimession.Height];
+            String = carte;
 
             for (int y = 0; y < Dimession.Height; y++)
             {
@@ -29,7 +30,9 @@ namespace GameOfLife.Lib
                 {
                     var key = new Point(x, y);
 
-                    _cells.Add(key, new Cellule(key, this));
+                    _cells.Add(key, new Cellule(key, this, carte[(y * Dimession.Width) + x]));
+
+                    _cellules[(y * Dimession.Width) + x] = _cells[new Point(x, y)];
                 }
             }
         }
@@ -51,7 +54,7 @@ namespace GameOfLife.Lib
 
         public Size Dimession { get; }
 
-        public string String => _carte;
+        public string String { get; private set; }
 
         public Cellule this[Point p]
         {
@@ -61,17 +64,18 @@ namespace GameOfLife.Lib
                 {
                     return cell;
                 }
-                return new Cellule(p, this);
+                return new Cellule(p, this, '0');
             }
         }
 
+        private readonly StringBuilder _sb = new StringBuilder();
         public void ExecuterTour()
         {
-            var sb = new StringBuilder();
+            _sb.Clear();
 
             foreach (var cellule in Cellules())
             {
-                var voisinEnVie = NbVoisinEnVie(cellule.Voisins());
+                var voisinEnVie = NbCellulesEnVie(cellule.Voisins());
 
                 var c = '0';
 
@@ -84,26 +88,25 @@ namespace GameOfLife.Lib
                     c = 'A';
                 }
 
-                sb.Append(c);
+                _sb.Append(c);
             }
 
-            Debug.Assert(sb.ToString().Length == _carte.ToString().Length);
+            Debug.Assert(_sb.ToString().Length == String.ToString().Length);
 
-            _carte = sb.ToString();
+            String = _sb.ToString();
 
-            for (int i = 0; i < _cellules.Count; i++)
+            for (int i = 0; i < _cellules.Length; i++)
             {
-                _cellules[i].Etat = _carte[(_cellules[i].Point.Y * Dimession.Width) + _cellules[i].Point.X];
+                _cellules[i].Etat = String[(_cellules[i].Point.Y * Dimession.Width) + _cellules[i].Point.X];
             }
         }
 
-        private static int NbVoisinEnVie(Cellule[] cellules)
+
+        private static int NbCellulesEnVie(Cellule[] cellules, int count = 0, int i = 0)
         {
             Debug.Assert(cellules.Length == 8);
 
-            int count = 0;
-
-            for (int i = 0; i < 8; i++)
+            for (; i < 8; i++)
             {
                 if (cellules[i].Etat == 'A')
                 {
@@ -116,27 +119,12 @@ namespace GameOfLife.Lib
 
         public override string ToString()
         {
-            return _carte;
+            return String;
         }
 
-        private List<Cellule> _cellules;
-        public IEnumerable<Cellule> Cellules()
+        private Cellule[] _cellules;
+        public Cellule[] Cellules()
         {
-            return _cellules ?? InitCellules();
-        }
-
-        private List<Cellule> InitCellules()
-        {
-            _cellules = new List<Cellule>(Dimession.Width * Dimession.Height);
-
-            for (int j = 0; j < Dimession.Height; j++)
-            {
-                for (int i = 0; i < Dimession.Width; i++)
-                {
-                    _cellules.Add(_cells[new Point(i, j)]);
-                }
-            }
-
             return _cellules;
         }
 

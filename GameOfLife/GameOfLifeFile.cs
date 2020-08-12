@@ -11,7 +11,7 @@ namespace GameOfLife
     {
         public int X { get; set; }
         public int Y { get; set; }
-        public string[] Carte { get; set; }
+        public string[]? Carte { get; set; }
 
         public string CarteAsSingleString() => Carte.Aggregate((current, next) => string.Concat(current, next));
 

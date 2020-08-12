@@ -15,13 +15,15 @@ namespace GameOfLife
 {
     public partial class Form1 : Form
     {
-        private Carte _carte;
+        private Carte? _carte;
 
-        private BitMapGenerator _generator;
+        private BitMapGenerator? _generator;
 
         public Form1()
         {
             InitializeComponent();
+
+            _chrono = new Stopwatch();
 
             LabelMessageError.Text = "";
 
@@ -32,8 +34,6 @@ namespace GameOfLife
             listTemplate.Items.AddRange(GameOfLifeFile.ObtenirTemplates());
 
             listTemplate.TextChanged += (sender, eventargs) => TrySetImageFromParameter();
-
-            NouvelleCarteAleatoire.Text = "Nouvelle carte aléatoire";
 
             NouvelleCarteAleatoire.Click += (sender, eventArgs) => NewRandomMap();
 
@@ -80,7 +80,9 @@ namespace GameOfLife
         }
 
         private CancellationTokenSource _tokenSource = new CancellationTokenSource();
-        private Task _task;
+        private Task? _task;
+        private readonly Stopwatch _chrono;
+
         private async void UpdateImage()
         {
             try
@@ -89,7 +91,14 @@ namespace GameOfLife
 
                 _task = Task.Run(() =>
                 {
-                    var chrono = new Stopwatch();
+                    if (_generator == null)
+                    {
+                        throw new MemberAccessException(nameof(_generator));
+                    }
+                    if (_carte == null)
+                    {
+                        throw new MemberAccessException(nameof(_carte));
+                    }
 
                     var directBitmap = _generator.ObtenirProchaineImage();
 
@@ -97,20 +106,20 @@ namespace GameOfLife
 
                     while (true)
                     {
-                        chrono.Reset();
-                        chrono.Start();
+                        _chrono.Reset();
+                        _chrono.Start();
 
                         _tokenSource.Token.ThrowIfCancellationRequested();
 
-                        _generator.UpdateBitmap(directBitmap);
+                        _generator.UpdateBitmap(directBitmap, _carte.String);
 
                         gameOfLifeImage.Image = directBitmap.Bitmap.Redimessionner(gameOfLifeImage.Bounds.Width, gameOfLifeImage.Bounds.Height);
 
-                        UpdateTime(t++);
+                        UpdateTime(t++, _chrono.ElapsedMilliseconds);
 
-                        chrono.Stop();
+                        _chrono.Stop();
 
-                        var timeLeft = int.Parse(SleepTime.Text) - (int)chrono.ElapsedMilliseconds;
+                        var timeLeft = int.Parse(SleepTime.Text) - (int)_chrono.ElapsedMilliseconds;
 
                         if (timeLeft >= 0)
                         {
@@ -148,9 +157,13 @@ namespace GameOfLife
             }
         }
 
-        private void UpdateTime(int t)
+        private void UpdateTime(int t, long deltaT)
         {
-            MethodInvoker methodInvokerDelegate = delegate () { LabelT.Text = $"t: {t}"; };
+            MethodInvoker methodInvokerDelegate = delegate ()
+            {
+                LabelT.Text = $"t: {t}";
+                LabelDeltaT.Text = $"Δt: {deltaT}ms";
+            };
 
             if (this.InvokeRequired)
             {

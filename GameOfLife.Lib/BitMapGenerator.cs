@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Drawing;
 using System.Text;
 
@@ -29,9 +30,9 @@ namespace GameOfLife.Lib
             return bitmap;
         }
 
-        public void UpdateBitmap(DirectBitmap bitmap)
+        public void UpdateBitmap(DirectBitmap bitmap, string cartePrecedente)
         {
-            var cartePrecedente = Carte.String;
+            Debug.Assert(cartePrecedente == Carte.String);
 
             Carte.ExecuterTour();
 

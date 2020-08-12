@@ -1,10 +1,6 @@
 ﻿using GameOfLife.Lib;
 using Shouldly;
-using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Text;
 using Xunit;
 
 namespace GameOfLife.Test
@@ -14,7 +10,7 @@ namespace GameOfLife.Test
         [Fact]
         public void CelluleAuCentreDEvraitÊtreVivante()
         {
-            var cellule = new Cellule(new Point(1, 1), new Carte(new Size(3, 3), "000AAA000"));
+            var cellule = new Cellule(new Point(1, 1), new Carte(new Size(3, 3), "000AAA000"), 'A');
 
             cellule.Etat.ShouldBe('A');
         }
@@ -22,9 +18,9 @@ namespace GameOfLife.Test
         [Fact]
         public void CellulePossede8Voisins()
         {
-            var cellule = new Cellule(new Point(1, 1), new Carte(new Size(3, 3), "000AAA000"));
+            var cellule = new Cellule(new Point(1, 1), new Carte(new Size(3, 3), "000AAA000"), 'A');
 
-            cellule.Voisins().Count().ShouldBe(8);
+            cellule.Voisins().Length.ShouldBe(8);
         }
     }
 }
